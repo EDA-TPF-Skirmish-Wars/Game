@@ -6,7 +6,7 @@
 #define CITY_CP 4
 
 typedef enum buildings { HQ, FACTORY, CITY} buildings_d;
-typedef enum { TEAM_RED, TEAM_BLUE, TEAM_GREEN, TEAM_YELLOW, NEUTRAL }teams_d;
+typedef enum { TEAM_RED, TEAM_BLUE, TEAM_GREEN, TEAM_YELLOW, NEUTRAL, ERROR_TEAM }teams_d;
 
 class Building {
 public:

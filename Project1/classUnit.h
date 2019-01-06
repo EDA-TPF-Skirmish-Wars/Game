@@ -79,6 +79,21 @@ private:
 
 	unsigned int defense;
 
+	unsigned int mcGrass;
+	unsigned int mcRoad;
+	unsigned int mcForest;
+	unsigned int mcRiver;
+	unsigned int mcHill;
+
+	unsigned int firePowerRatingFOOT;
+	unsigned int firePowerRatingTREAD;
+	unsigned int firePowerRatingWHEEL;
+
+	unsigned int firePowerReducedFOOT;
+	unsigned int firePowerReducedTREAD;
+	unsigned int firePowerReducedWHEEL;
+
 	unit_state_d status;
+
 };
 

@@ -6,9 +6,6 @@
 #define BOARD_WIDTH 10
 #define BOARD_HEIGHT 10
 
-typedef enum { TEAM_RED, TEAM_BLUE, TEAM_GREEN, TEAM_YELLOW, NO_TEAM }teams_d;
-
-
 typedef struct {
 	bool attackUpAvailable;
 	bool attackDownAvailable;
@@ -20,37 +17,50 @@ typedef struct {
 	bool moveLeftAvailable;
 	bool moveRightAvailable;
 	bool passAvailable;
-
+	bool captureAvailable;
+	bool canLoad;
+	bool canUnload;
 }options_s;
+
+
+typedef struct {
+	teams_d team;
+	unsigned int HQCPoints;
+	unsigned int numberFactories;
+	unsigned int numberCities;
+	unsigned int numberUnits;
+}p_inv_s;
 
 class Map
 {
 public:
-	Map(VER QUE LE PASO); //creo que no hace falta
+	Map(); //seteo el arreglo de punteros a tile en null
 	~Map();
 
 	Unit getUnit(Position pos);
 	Building getBuilding(Position pos);
+
+	Unit * getUnitPtr(Position pos);
+	Building * getBuildingPtr(Position pos);
+
 	unit_type getUnitType(Position pos);
-	teams_d getUnitTeam(Position p);
-	teams_d getBuildingTeam(Position p);
+	teams_d getUnitTeam(Position pos);
+	teams_d getBuildingTeam(Position pos);
 	bool getFog(Position pos);
 	terrains_d getTerrain(Position pos);
 
-	int getTeam(); //del mapa
-	int getEnemyTeam();
+	teams_d getTeam(); //del mapa
+	teams_d getEnemyTeam();
 
 	bool IsUnitOnTop(Position pos);
 	bool IsBuildingOnTop(Position pos);
-	bool IsPositionInsideBoard(Position pos);
 	
-	void setTerrains(vector<Tile> newTile);
-	void setTeam();
-	void setEnemyTeam(int enemyTeam);
+	void setTeam(teams_d team);
+	void setEnemyTeam(teams_d enemyTeam);
 
 	void addTile(Position pos, terrains_d type, bool fog);
-	void addBuilding(buildings_d type, teams_d color, Position pos);
-	void addUnit(units_d unitClass, Position pos, teams_d owner);
+	bool addBuilding(buildings_d type, teams_d color, Position pos);
+	bool addUnit(units_d unitClass, Position pos, teams_d owner);
 
 	options_s getOptions(Position pos);
 	
@@ -60,18 +70,21 @@ public:
 	//movesAvailable
 
 
-	void killUnit(Position pos);
+	void removeUnit(Position pos);
 	void changeUnitPos(Position pos, Position newPos);
+	void clearFog(Position pos);// saca la fog de la tile de arriba abajo derecha e izquierda de la posición que le mando
 	void selectTile(Position pos);
 	void unselectTile(Position pos);
 
-	//void updatePlayerInventory (team, HP_hq, numberFactories, numberCities, numberUnits) //ver donde llevar la cuenta para saber cuando se termina el juego
-	 
+	bool posInMap(Position pos);
+
+
+	p_inv_s getPlayerInventory(teams_d color);
 	options_s getOptions(Position pos); //cambia si en esa tile hay solo building, solo unit o hay ambas 
 
 private:
 	Tile * board[BOARD_HEIGHT][BOARD_WIDTH]; //para agregar tile uso la position
-	int team;
-	int enemyTeam;
+	teams_d team;
+	teams_d enemyTeam;
 };
 

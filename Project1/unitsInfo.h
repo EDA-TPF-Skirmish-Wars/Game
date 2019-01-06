@@ -1,7 +1,7 @@
 #pragma once
 
 typedef enum { INFANTRY, MECH, RECON, TANK, MEDTANK, APC, ARTILLERY, ROCKET, ANTIAIR }units_d;
-typedef enum { FOOT, WHEEL, TREAD } unit_type;
+typedef enum { FOOT, WHEEL, TREAD} unit_type;
 
 #define HP_MAX 8
 #define HP_REDUCED 4

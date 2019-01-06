@@ -12,7 +12,7 @@
 using namespace std;
 
 
-typedef enum { GRASS, ROAD, FOREST, RIVER, HILL, BUILDING}terrains_d;
+typedef enum { GRASS, ROAD, FOREST, RIVER, HILL, BUILDING, NO_TILE}terrains_d;
 
 typedef enum {FOG_OFF, FOG_ON}fog_status;
 
@@ -24,7 +24,7 @@ class Tile
 public:
 	friend class Map;
 	
-	Tile(Position pos, terrains_d type, bool fog); //puntero unit y building NULL, fog true
+	Tile(Position pos, terrains_d type, bool fog); //puntero unit y building NULL
 	~Tile(); //borrar punteros
 
 	Position getPosition();

@@ -4,8 +4,8 @@ class Position
 {
 public:
 	Position();
-	Position(unsigned int row, unsigned int column);
+	Position(int row, int column);
 
-	unsigned int row;
-	unsigned int column;
+	int row;
+	int column;
 };
