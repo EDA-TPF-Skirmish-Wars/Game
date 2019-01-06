@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TileClass.h"
-#include "unitInfo.h" //hacer
+#include "unitsInfo.h" 
 
 #define BOARD_WIDTH 10
 #define BOARD_HEIGHT 10
@@ -31,7 +31,7 @@ public:
 
 	Unit getUnit(Position pos);
 	Building getBuilding(Position pos);
-	unit_types_d getUnitType(Position pos);
+	unit_type getUnitType(Position pos);
 	teams_d getUnitTeam(Position p);
 	teams_d getBuildingTeam(Position p);
 	bool getFog(Position pos);
@@ -50,7 +50,7 @@ public:
 
 	void addTile(Position pos, terrains_d type, bool fog);
 	void addBuilding(buildings_d type, teams_d color, Position pos);
-	void addUnit(Unit newUnit);//ver 
+	void addUnit(units_d unitClass, Position pos, teams_d owner);
 
 	options_s getOptions(Position pos);
 	
