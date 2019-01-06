@@ -1,5 +1,5 @@
 #pragma once
-#include "classUnits.h"
+#include "classUnit.h"
 #include "classBuilding.h"
 #include "Position.h"
 #include <string>
@@ -13,8 +13,6 @@ using namespace std;
 
 
 typedef enum { GRASS, ROAD, FOREST, RIVER, HILL, BUILDING}terrains_d;
-
-typedef enum { HOST, OPPONENT, NEUTRAL }player_d;
 
 typedef enum {FOG_OFF, FOG_ON}fog_status;
 
@@ -37,8 +35,8 @@ public:
 
 	void clearFog();
 	
-	bool UnitOnTop();
-	bool BuildingOnTop();
+	bool IsUnitOnTop();
+	bool IsBuildingOnTop();
 
 	bool setUnit(Unit * unitOnTop); //ver si hay building de capturar o de curar la unit
 	bool setBuilding(Building * buildingOnTop);

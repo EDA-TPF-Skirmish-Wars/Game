@@ -110,12 +110,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="classAPC.h" />
+    <ClInclude Include="classBuilding.h" />
     <ClInclude Include="classMap.h" />
+    <ClInclude Include="classPlayer.h" />
+    <ClInclude Include="classUnit.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="TileClass.h" />
+    <ClInclude Include="unitsInfo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="classAPC.cpp" />
+    <ClCompile Include="classBuilding.cpp" />
     <ClCompile Include="classMap.cpp" />
+    <ClCompile Include="classPlayer.cpp" />
+    <ClCompile Include="classUnit.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="TileClass.cpp" />
   </ItemGroup>

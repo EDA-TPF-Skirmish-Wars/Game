@@ -59,12 +59,12 @@ void Tile::clearFog()
 		fog = FOG_OFF;
 }
 
-bool Tile::UnitOnTop()
+bool Tile::IsUnitOnTop()
 {
 	return unitOnTop != nullptr;
 }
 
-bool Tile::BuildingOnTop()
+bool Tile::IsBuildingOnTop()
 {
 	return buildingOnTop != nullptr;
 }
