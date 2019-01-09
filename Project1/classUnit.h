@@ -13,7 +13,7 @@ public:
 	Unit(units_d unitClass, Position pos, teams_d owner);
 	~Unit();
 
-	unsigned int getCost();
+	static unsigned int getCost(units_d class);
 	unsigned int getActualMP();
 	unsigned int getMaxMps(units_d type);
 	unsigned int getDefense();
@@ -38,7 +38,7 @@ public:
 	bool unloadAPC();
 
 	void ChangeUnitPosition();
-	Unit boughtUnit(units_d type, Position position, teams_d color);
+	static Unit boughtUnit(units_d type, Position position, teams_d color);
 
 	bool IsValidMove(); //VER mp!!! que devuelva los que necesita
 	bool IsValidAttack();
