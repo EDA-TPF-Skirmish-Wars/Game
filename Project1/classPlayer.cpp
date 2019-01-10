@@ -119,9 +119,9 @@ void Player::nextState()
 	{
 	case WAITING:
 	{
-		status = MOV_AND_ATT;
+		status = MOVE_AND_ATT;
 	}break;
-	case MOV_AND_ATT:
+	case MOVE_AND_ATT:
 	{
 		status = PURCHASING;
 	}break;

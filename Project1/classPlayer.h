@@ -5,7 +5,7 @@
 
 
 
-typedef enum playerStatus { PURCHASING, MOV_AND_ATT, WAITING, IDLE } playerStatus_d;
+typedef enum playerStatus { PURCHASING, MOVE_AND_ATT, WAITING, IDLE } playerStatus_d;
 
 class Player {
 public:
