@@ -3,8 +3,6 @@
 #include "classMap.h"
 #include <list>
 
-#define HEAL_HP 2
-
 typedef enum { IDLE, SELECTED, ATTACKING, MOVING, BLOCKED, DEAD } unit_state_d; // estados dependiendo en si pueden ser clickeadas o no
 
 class Unit {
@@ -13,18 +11,19 @@ public:
 	Unit(units_d unitClass, Position pos, teams_d owner);
 	~Unit();
 
-	static unsigned int getCost(units_d class);
+	static unsigned int getCost();
 	unsigned int getActualMP();
-	unsigned int getMaxMps(units_d type);
+	unsigned int getMaxMps();
 	unsigned int getDefense();
 	unsigned int getHP();
-	unsigned int getTerrainMC(units_d Utype, terrains_d type);
-	unsigned int getAttackFP(units_d type, unit_type TargetUnitType, bool Isreduced);
+	unsigned int getTerrainMC(terrains_d type);
+	unsigned int getAttackFP(unit_type TargetUnitType, bool Isreduced);
 	Position getPosition();
 	teams_d getTeam();
 	units_d getUnitClass();
 	unit_type getType();
-	unsigned int getRange(units_d type, unsigned int& minRange, unsigned int& maxRange);
+	unsigned int getMaxRange();
+	unsigned int getMinRange();
 
 
 	bool isReduced();
@@ -37,7 +36,7 @@ public:
 	bool loadAPC();
 	bool unloadAPC();
 
-	void ChangeUnitPosition();
+	void ChangeUnitPosition(Position where);
 	static Unit boughtUnit(units_d type, Position position, teams_d color);
 
 	bool IsValidMove(); //VER mp!!! que devuelva los que necesita
@@ -46,7 +45,7 @@ public:
 	int attackDamage(); //Devuelve el valor que le reducio la unidad
 	int attackTerrainModTable(); //tabla de trrain modifier para calcular el daño hecho
 	int attackDiceMod(); // devuelve el valor que modifica el dado con el initial damage
-	int attackTargetDefenceRating();	//obtengo el defence rating de la unidad que estoy atacando
+	int attackTargetDefenceRating();//obtengo el defence rating de la unidad que estoy atacando
 
 	int attackWhatTypeIsUnit();//obtengo que tipo de unidad es el que estoy atacando
 	int attackWhatUnitIs(); //que tipo de unit estoy atacando
@@ -69,10 +68,11 @@ private:
 	teams_d owner;
 	Position pos;
 
+	static unsigned int maxMP;
 	unsigned int movingPoints;
 	unsigned int healthPoints;
 
-	unsigned int unitCost;
+	static unsigned int unitCost;
 
 	unsigned int rangeMax;
 	unsigned int rangeMin;

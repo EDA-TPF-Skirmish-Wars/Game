@@ -5,6 +5,7 @@ typedef enum { FOOT, WHEEL, TREAD} unit_type;
 
 #define HP_MAX 8
 #define HP_REDUCED 4
+#define HEAL_HP 2
 #define MP_MAX 99 //no se puede mover por ahí
 
 //Infantry

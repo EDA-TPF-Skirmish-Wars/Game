@@ -1,0 +1,73 @@
+#include "classAPC.h"
+
+classAPC::classAPC(Position pos, teams_d owner)
+{
+	this->pos = pos;
+	this->owner = owner;
+	NUnitsInside = 0;
+	UnitsLoaded.clear();
+}
+
+classAPC::~classAPC()
+{
+	while (UnitsLoaded.empty())
+	{
+		delete UnitsLoaded.front();
+		UnitsLoaded.pop_front();
+	}
+}
+
+bool classAPC::isFull()
+{
+	return (NUnitsInside == APC_MAX_LOAD);
+}
+
+bool classAPC::loadUnitIfPossible(Unit unitToLoad, teams_d colorToLoad)
+{
+	if (NUnitsInside < APC_MAX_LOAD && colorToLoad == owner)
+	{
+		UnitsLoaded.push_back(&unitToLoad);
+		NUnitsInside++;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool classAPC::unloadingUnitIfPossible(Position pos)
+{
+	if (!UnitsLoaded.empty())
+	{
+		if ((abs(pos.row - this->pos.row) + abs(pos.column - this->pos.column)) == 1) //se descarga solo a lugaes que esten a 1 de distancia
+		{
+			Unit * unitUnloaded = UnitsLoaded.back();
+			unitUnloaded->ChangeUnitPosition(pos);
+			UnitsLoaded.pop_back();
+			NUnitsInside--;
+			return true;
+		}
+		else
+			return false;
+	}
+	else
+		return false;
+}
+
+void classAPC::healLoadedUnits()
+{
+	list<Unit*>::iterator iter;
+	iter = this->UnitsLoaded.begin();
+	while(iter != this->UnitsLoaded.end())
+	{
+		(*iter)->heal();
+	}
+}
+void classAPC::ChangeUnitsPosition()
+{
+	list<Unit*>::iterator iter;
+	iter = this->UnitsLoaded.begin();
+	while (iter != this->UnitsLoaded.end())
+	{
+		(*iter)->ChangeUnitPosition(this->pos);
+	}
+}
