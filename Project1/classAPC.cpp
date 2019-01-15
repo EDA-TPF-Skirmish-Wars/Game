@@ -1,6 +1,6 @@
 #include "classAPC.h"
 
-classAPC::classAPC(Position pos, teams_d owner)
+classAPC::classAPC(Position pos, teams_d owner) : Unit(APC, pos, owner)
 {
 	this->pos = pos;
 	this->owner = owner;

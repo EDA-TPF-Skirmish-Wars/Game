@@ -11,7 +11,8 @@ public:
 	Unit(units_d unitClass, Position pos, teams_d owner);
 	~Unit();
 
-	static unsigned int getCost();
+	static unsigned int getCost(units_d unitClass);
+	unsigned int getCost();
 	unsigned int getActualMP();
 	unsigned int getMaxMps();
 	unsigned int getDefense();
@@ -37,16 +38,15 @@ public:
 	bool unloadAPC();
 
 	void ChangeUnitPosition(Position where);
-	static Unit boughtUnit(units_d type, Position position, teams_d color);
+	static Unit* boughtUnit(units_d unitClass, Position position, teams_d color);
 
 	bool IsValidMove(); //VER mp!!! que devuelva los que necesita
 	bool IsValidAttack();
 
-	int attackDamage(); //Devuelve el valor que le reducio la unidad
-	int attackTerrainModTable(); //tabla de trrain modifier para calcular el daño hecho
-	int attackDiceMod(); // devuelve el valor que modifica el dado con el initial damage
+	int attackDamage(int initdamage, unsigned dice, terrains_d enemyTerrain, buildings_d isThereBuilding); //Devuelve el fp con el que ataca la unuidad( le paso el damage con el defence ya restado)
 	int attackTargetDefenceRating();//obtengo el defence rating de la unidad que estoy atacando
-
+	int attackTerrainModTable(); //tabla de trrain modifier
+	int attackTerrainMod(); // devuelve el valor que modifica el dado con el initial damage
 	int attackWhatTypeIsUnit();//obtengo que tipo de unidad es el que estoy atacando
 	int attackWhatUnitIs(); //que tipo de unit estoy atacando
 
@@ -55,11 +55,10 @@ public:
 	void resetMP();
 	
 	void getPossibleMoves(list<Position>& moves, Position start, Position curr, unsigned int mps);
-	void getPossibleAttacks(list<Position>& attacks, Position position, unsigned int mps);
+	list<Position> getPossibleAttacks(Position position, unsigned int mps);
 
 	bool isItAPC();
 	bool ifAPCisFull();
-	bool APCUnloadUnit();
 
 
 private:

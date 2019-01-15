@@ -54,9 +54,9 @@ void Player::updateInventory()
 	this->units = temp.numberUnits;
 }
 
-Unit Player::buyUnit(units_d unitClass, Position pos)
+Unit* Player::buyUnit(units_d unitClass, Position pos)
 {
-	Unit newUnit= Unit(unitClass, pos, color);
+	Unit * newUnit = nullptr;
 	if (status == PURCHASING && Unit::getCost(unitClass) <= money)
 	{
 		newUnit = Unit::boughtUnit(unitClass, pos, color);

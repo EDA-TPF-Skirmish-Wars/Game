@@ -220,6 +220,7 @@ options_s getOptions(Position pos);
 bool buyingAvailable(Position pos, teams_d color);
 bool Map::captureAvailable(Position pos, teams_d color)
 {
+	isFloorPositionFree
 	if(IsUnitOnTop(pos))
 }
 //movesAvailable

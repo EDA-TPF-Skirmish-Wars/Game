@@ -1,7 +1,7 @@
 #pragma once
 
-typedef enum { INFANTRY, MECH, RECON, TANK, MEDTANK, APC, ARTILLERY, ROCKET, ANTIAIR }units_d;
-typedef enum { FOOT, WHEEL, TREAD} unit_type;
+typedef enum { INFANTRY, MECH, RECON, TANK, MEDTANK, APC, ARTILLERY, ROCKET, ANTIAIR, ERRORCLASS }units_d;
+typedef enum { FOOT, WHEEL, TREAD, ERRORTYPE} unit_type;
 
 #define HP_MAX 8
 #define HP_REDUCED 4
@@ -250,49 +250,30 @@ typedef enum { FOOT, WHEEL, TREAD} unit_type;
 
 
 
-#define MCTERRAINS 5
-#define TOTALINITDMG 13
-#define TOTALTERRAINMODIF 5
 
-//VER BIEN COMO CONVIENE HACER LA TABLA
-const int terrainDefenceModifieres[TOTALINITDMG][MCTERRAINS] = {
-	{ 8, 0, 0, 0, 0 } ,
-	{ 7, 0, 0, 0, 0 } ,
-	{ 6, 8, 0, 0, 0 } ,
-	{ 6, 7, 8, 0, 0 } ,
-	{ 5, 6, 7, 8, 0 } ,
-	{ 5, 5, 6, 7, 8 } ,
-	{ 4, 5, 6, 6, 7 } ,
-	{ 3, 4, 5, 5, 6 } ,
-	{ 3, 3, 4, 4, 5 } ,
-	{ 2, 3, 3, 4, 4 } ,
-	{ 2, 2, 2, 3, 3 } ,
-	{ 1, 1, 2, 2, 2 } ,
-	{ 0, 1, 1, 1, 1 } ,
-	{ 0, 0, 0, 0, 0 } ,
-	{ 0, 0, 0, 0, 0 } ,
-	{ 0, 0, 0, 0, 0 } ,
-	{ 0, 0, 0, 0, 0 } ,
-};
+#define TOTALINITDMG 17 //-3 a 13
+#define TOTALTERRAINMODIF 5 //HILL/HQ, CITY, FOREST, GRASS, ROAD/RIVER
+typedef struct {
+	unsigned int terrainMod;
+	unsigned int dice;
+}defenceMod_s;
 
-
-const int terrainDefenceModifieresDICE[TOTALINITDMG][TOTALTERRAINMODIF] = {
-	{ 0, 0, 0, 0, 0 } ,
-	{ 3, 0, 0, 0, 0 } ,
-	{ 5, 0, 0, 0, 0 } ,
-	{ 2, 2, 0, 0, 0 } ,
-	{ 4, 4, 4, 0, 0 } ,
-	{ 1, 5, 5, 4, 0 } ,
-	{ 3, 1, 1, 5, 3 } ,
-	{ 5, 3, 1, 5, 3 } ,
-	{ 2, 5, 2, 5, 3 } ,
-	{ 4, 1, 4, 1, 3 } ,
-	{ 1, 3, 5, 1, 3 } ,
-	{ 3, 5, 1, 2, 3 } ,
-	{ 5, 1, 1, 2, 3 } ,
-	{ 1, 2, 3, 4, 5 } ,
-	{ 1, 1, 2, 2, 3 } ,
-	{ 0, 0, 1, 1, 2 } ,
-	{ 0, 0, 0, 0, 1 } ,
-
+const defenceMod_s terrainDefenceModifieres[TOTALINITDMG][TOTALTERRAINMODIF] = {
+	{ { 0,0 },{ 0,0 },{ 0,0 },{ 0,0 },{ 0,1 } } , //-3
+	{ { 0,0 },{ 0,0 },{ 0,1 },{ 0,1 },{ 0,2 } } ,
+	{ { 0,1 },{ 0,1 },{ 0,2 },{ 0,2 },{ 0,3 } } ,
+	{ { 0,1 },{ 0,2 },{ 0,3 },{ 0,4 },{ 0,5 } } ,
+	{ { 0,5 },{ 1,1 },{ 1,1 },{ 1,2 },{ 1,3 } } ,
+	{ { 1,3 },{ 1,5 },{ 2,1 },{ 2,2 },{ 2,3 } } ,
+	{ { 2,1 },{ 2,3 },{ 2,5 },{ 3,1 },{ 3,3 } } ,
+	{ { 2,4 },{ 3,1 },{ 3,4 },{ 4,1 },{ 4,3 } } , //4
+	{ { 3,2 },{ 3,5 },{ 4,2 },{ 4,5 },{ 5,3 } } ,
+	{ { 3,5 },{ 4,3 },{ 5,1 },{ 5,5 },{ 6,3 } } ,
+	{ { 4,3 },{ 5,1 },{ 6,1 },{ 6,5 },{ 7,3 } } ,
+	{ { 5,1 },{ 5,5 },{ 6,5 },{ 7,4 },{ 8,0 } } ,
+	{ { 5,4 },{ 6,4 },{ 7,4 },{ 8,0 },{ 9,0 } } , //9
+	{ { 6,2 },{ 7,2 },{ 8,0 },{ 10,0 },{ 10,0 } } ,
+	{ { 6,5 },{ 8,0 },{11,0 },{ 11,0 },{ 11,0 } } ,
+	{ { 7,3 },{ 12,0 },{ 12,0 },{ 12,0 },{ 12,1 } } ,
+	{ { 8,0 },{ 13,0 },{ 13,0 },{ 13,0 },{ 13,1 } }
 };

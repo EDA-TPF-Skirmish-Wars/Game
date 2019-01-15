@@ -25,7 +25,7 @@ public:
 	void nextState();
 	void updateInventory();
 
-	Unit buyUnit(units_d unitClass, Position pos);
+	Unit * buyUnit(units_d unitClass, Position pos);
 	void captureNewBuilding(buildings_d type);
 
 	void killedUnit();

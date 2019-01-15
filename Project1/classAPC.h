@@ -4,7 +4,7 @@
 
 #define APC_MAX_LOAD 2
 
-class classAPC
+class classAPC: public Unit
 {
 public:
 	classAPC(Position pos, teams_d owner);
