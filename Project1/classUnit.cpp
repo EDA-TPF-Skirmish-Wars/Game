@@ -346,7 +346,7 @@ unsigned int Unit::getAttackFP(unit_type TargetUnitType, bool Isreduced)
 		{
 		case FOOT:
 		{
-			return firePowerRatingFOOT
+			return firePowerRatingFOOT;
 		}break;
 		case WHEEL:
 		{
@@ -481,6 +481,7 @@ bool Unit::isItAPC()
 		return false;
 }
 
+//INIT DAMAGE YA SE LE RESTA EL DEFENCE DE ENEMIGO, devuelve el daño hecho con los terrain modifiers, ES EL DAMAGE FINAL 
 int Unit::attackDamage(int initdamage, unsigned dice, terrains_d enemyTerrain, buildings_d Building)
 {
 	int damage;
@@ -511,18 +512,23 @@ int Unit::attackDamage(int initdamage, unsigned dice, terrains_d enemyTerrain, b
 	}break;
 	}
 
-	if (Building == HQ)
-		col = 0;
-	else
-		col = 1;
-
+	if (BUILDING != NO_BUILDING)
+	{
+		if (Building == HQ)
+			col = 0;
+		else
+			col = 1;
+	}
+	
 	damage = terrainDefenceModifieres[row][col].terrainMod;
 
 	if (dice <= terrainDefenceModifieres[row][col].dice)
 		damage++;
 	return damage;
 }
-list<Position> Unit::getPossibleAttacks(Position position, unsigned int mps)
+//chequea si la unidad esta dentro del rango, si tiene fog y si la unidad es propia o del enemy
+//NO SE FIJA SI HAY UNITS EN EL MEDIO
+list<Position> Unit::getPossibleAttacks(Map map)
 {
 	list<Position> posibleAttacks;
 
@@ -531,38 +537,111 @@ list<Position> Unit::getPossibleAttacks(Position position, unsigned int mps)
 
 			Position pos(i, j);
 			unsigned int dist = abs(pos.row - this->pos.row) + abs(pos.column - this->pos.column);
-			if(dist >= rangeMin && dist <= rangeMax && )
+			if (dist >= rangeMin && dist <= rangeMax && map.IsUnitOnTop(pos) && (map.getUnitTeam != owner)&& (map.getFog(pos) == FOG_OFF))
+			{
+				posibleAttacks.push_back(pos);
+			}
 		}
 	}
+	return posibleAttacks;
+}
+
+void Unit::selectUnit()
+{
+	if (status != BLOCKED)
+	status = SELECTED;
+}
+
+bool Unit::IsValidAttack(Map map, Position WhereTO)
+{
+	list<Position> attacksPossible = getPossibleAttacks(map);
+	bool valid = false;
+
+	if (status == SELECTED)  
+	{
+		for (list<Position>::iterator it = attacksPossible.begin(); it != attacksPossible.end(); it++)
+		{
+			if (it->row == WhereTO.row && it->column == WhereTO.column)
+				valid = true;
+		}
+	}
+
+	return valid;
+}
+
+bool Unit::attack(Map map, Position whereTo, unsigned int dice)
+{
+	bool valid = false;
+	if (IsValidAttack(map, whereTo) && 1 <= dice && 6 >= dice)
+	{
+		Unit * enemy = map.getUnitPtr(whereTo);
+		unit_type enemyType = enemy->getType();
+		int defenseRating = enemy->getDefense();
+
+		terrains_d enemyTerrain = map.getTerrain(whereTo);
+
+		buildings_d building = NO_BUILDING;
+		if (map.IsBuildingOnTop(whereTo) == true)
+		{
+			building = map.getBuilding(whereTo).getBuildingType();
+		}
+
+		int initDamage = getAttackFP(enemyType, isReduced()) - defenseRating;
+		int totalDamge = attackDamage(initDamage, dice, enemyTerrain, building);
+
+		enemy->healthPoints = enemy->healthPoints - totalDamge;
+
+		if (!enemy->isAlive()) //ver que pasa si es APC con loaded units
+		{
+			enemy->status = DEAD;
+			map.removeUnit(whereTo); //VER COMO SE MUESTRA EN EL OTRO MAPA
+		}
+
+		status = ATTACKING;
+
+		valid = true;
+	}
+	return valid;
+}
+
+
+bool Unit::move(Position WhereTo, Map map)
+{
+	bool valid = false;
+
+	if (IsValidMove(map, WhereTo))
+	{
+		this->pos = WhereTo;
+		this->status = MOVING;
+		this->movingPoints = this->movingPoints - getMoveMPS(WhereTo, map);
+
+		map.changeUnitPos(this->pos, WhereTo);
+
+			valid = true;
+
+		if (isItAPC())
+		{
+			((classAPC*) this)->ChangeUnitsPosition();
+		}
+		
+	}
+
+	return valid;
 
 }
 
 
+
+
 /////////////////////////FALTA////////////////////////////
-
-bool move();
-bool attack(); //devolver el daño hecho uso función attackDamage()
+void Unit::ChangeUnitPosition(Position where)
+bool Unit::loadAPC()
 bool capture();
-bool loadAPC();
 bool unloadAPC();
-
-void ChangeUnitPosition();
-
-
 bool IsValidMove(); //VER mp!!! que devuelva los que necesita
-bool IsValidAttack();
+void Unit::getPossibleMoves(list<Position>& moves, Position tempPos, unsigned int mps, int currMPs);
+unsigned int Unit::getMoveMPS(Position origin, Position destination, Position temp, Map map);
 
-
-
-int attackTargetDefenceRating();	//obtengo el defence rating de la unidad que estoy atacando
-
-int attackWhatTypeIsUnit();//obtengo que tipo de unidad es el que estoy atacando
-int attackWhatUnitIs(); //que tipo de unit estoy atacando
-
-
-
-
-void getPossibleMoves(list<Position>& moves, Position start, Position curr, unsigned int mps);
 
 
 

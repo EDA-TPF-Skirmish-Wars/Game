@@ -19,6 +19,11 @@ public:
 	void healLoadedUnits();
 	void ChangeUnitsPosition();
 
+	bool canLoad(teams_d colorToLoad);
+	bool canUnload(Position pos);
+
+
+
 private:
 	unsigned int NUnitsInside; //cuantifica la cantidad de unidades que tiene adentro 0 1 2
 	list<Unit*> UnitsLoaded;

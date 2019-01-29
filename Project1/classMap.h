@@ -65,10 +65,11 @@ public:
 	options_s getOptions(Position pos);
 	
 	//funciones para completar options_s
-	bool buyingAvailable(Position pos, teams_d color);
-	bool captureAvailable(Position pos, teams_d color);
+	bool buyingAvailable(Position pos);
+	bool captureAvailable(Position pos);
 	//movesAvailable
-
+	bool loadAvailable(Position pos);
+	bool Map::unloadAvailable(Position pos, Position WhereTo);
 
 	void removeUnit(Position pos);
 	void changeUnitPos(Position pos, Position newPos);

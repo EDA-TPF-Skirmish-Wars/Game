@@ -204,32 +204,82 @@ bool Map::posInMap(Position pos)
 		return false;
 }
 
-																																					
-///////////////////////LO QUE FALTA//////////////////////////////////
+bool Map::buyingAvailable(Position pos)
+{
+	if (board[pos.row][pos.column]->getBuilding()->getBuildingType() == FACTORY
+		&& (board[pos.row][pos.column]->getBuilding()->getBuildingTeam == team))
+		return true;
+	else
+		return false;
+}
+		
 
+bool Map::loadAvailable(Position pos)
+{
+	if (IsUnitOnTop(pos) && getUnitPtr(pos)->getUnitClass() == APC)
+	{
+		classAPC * apc = (classAPC *)getUnitPtr(pos);
+		if (apc->canLoad(this->team))
+			return true;
+		else
+			return false;
+	}
+	return false;
+}
+
+bool Map::unloadAvailable(Position pos, Position WhereTo)
+{
+	if (IsUnitOnTop(pos) && getUnitPtr(pos)->getUnitClass() == APC)
+	{
+		classAPC * apc = (classAPC *)getUnitPtr(pos);
+		if (apc->canUnload(WhereTo))
+			return true;
+		else
+			return false;
+	}
+	return false;
+}
+
+
+
+bool Map::captureAvailable(Position pos)
+{
+	if (IsBuildingOnTop(pos) && (getBuildingTeam(pos) != this->team) && (!IsUnitOnTop(pos)))
+		return true;
+	else
+		return false;
+}
 
 void Map::changeUnitPos(Position pos, Position newPos)
 {
+	if (IsUnitOnTop(newPos) && (getUnitPtr(newPos)->getUnitClass() == APC))
+	{
+		if (getUnitType(pos) == FOOT && loadAvailable(newPos)) {
+			classAPC * apc = (classAPC *)getUnitPtr(newPos);
+			apc->loadUnitIfPossible(getUnit(pos), getUnitTeam(pos));
+		}
 
+	}
+	else
+	{
+		if (getUnitType(pos) == FOOT && captureAvailable(newPos))
+		{
+			getBuildingPtr(newPos)->captureBuilding(getUnitTeam(pos), getUnit(pos).isReduced());
+		}
+		clearFog(newPos);
+		board[newPos.row][newPos.column]->setUnit(getUnitPtr(pos));
 
+	}
+
+	removeUnit(pos);
 }
 
-options_s getOptions(Position pos);
+///////////////////////LO QUE FALTA//////////////////////////////////
 
-//funciones para completar options_s
-bool buyingAvailable(Position pos, teams_d color);
-bool Map::captureAvailable(Position pos, teams_d color)
+
+
+options_s Map::getOptions(Position pos)
 {
-	isFloorPositionFree
-	if(IsUnitOnTop(pos))
-}
-//movesAvailable
-
-//update
-
-
-
-options_s Map::getOptions(int x, int y) {
 	options_s tmp;
 	tmp.attackDownAvailable = false;
 	tmp.attackLeftAvailable = false;
@@ -241,15 +291,22 @@ options_s Map::getOptions(int x, int y) {
 	tmp.moveRightAvailable = false;
 	tmp.moveUpAvailable = false;
 	tmp.passAvailable = true;
-	if (isThereAFriendUnitThere(x, y)) {
-		if (isThereAnEnemyThere(x, y - 1, getEnemyTeam())) {
+	tmp.captureAvailable = false;
+	tmp.canLoad = false;
+	tmp.canUnload = false;
+
+	Position temp = pos;
+
+	temp.row++;
+
+	if (IsUnitOnTop(temp) && getUnitTeam(temp) != team)
+	{
 			tmp.attackUpAvailable = true;
-			tmp.moveUpAvailable = false;
-		}
-		else {
-			tmp.attackUpAvailable = false;
-			tmp.moveUpAvailable = true;
-		}
+	}
+	else 
+	{
+		tmp.moveUpAvailable = true;
+	}
 		if (isThereAnEnemyThere(x, y + 1, getEnemyTeam())) {
 			tmp.attackDownAvailable = true;
 			tmp.moveDownAvailable = false;
@@ -280,4 +337,12 @@ options_s Map::getOptions(int x, int y) {
 	}
 	return tmp;
 }
+
+
+}
+
+
+
+
+//movesAvailable
 

@@ -8,7 +8,7 @@
 #define REDUCED_CP 1
 #define FULL_STRENTH_CP 2
 
-typedef enum buildings { HQ, FACTORY, CITY} buildings_d;
+typedef enum buildings { HQ, FACTORY, CITY, NO_BUILDING} buildings_d;
 typedef enum { TEAM_RED, TEAM_BLUE, TEAM_GREEN, TEAM_YELLOW, NEUTRAL, ERROR_TEAM }teams_d;
 
 class Building {

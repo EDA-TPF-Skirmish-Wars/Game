@@ -22,6 +22,22 @@ bool classAPC::isFull()
 	return (NUnitsInside == APC_MAX_LOAD);
 }
 
+bool classAPC::canLoad(teams_d colorToLoad)
+{
+	if (isFull() == false && colorToLoad == this->owner)
+		return true;
+	else
+		return false;
+}
+
+bool classAPC::canUnload(Position pos)
+{
+	if ((abs(pos.row - this->pos.row) + abs(pos.column - this->pos.column)) == 1)
+		return true;
+	else
+		return false;
+}
+
 bool classAPC::loadUnitIfPossible(Unit unitToLoad, teams_d colorToLoad)
 {
 	if (NUnitsInside < APC_MAX_LOAD && colorToLoad == owner)
