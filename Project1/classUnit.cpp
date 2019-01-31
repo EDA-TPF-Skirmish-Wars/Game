@@ -597,7 +597,7 @@ bool Unit::attack(Map map, Position whereTo, unsigned int dice)
 			map.removeUnit(whereTo); //VER COMO SE MUESTRA EN EL OTRO MAPA
 		}
 
-		status = ATTACKING;
+		status = BLOCKED; //no puedo moverme despues de atacar
 
 		valid = true;
 	}
@@ -611,10 +611,10 @@ bool Unit::move(Position WhereTo, Map map)
 
 	if (IsValidMove(map, WhereTo))
 	{
+		this->movingPoints = this->movingPoints - getMoveMPS(this->pos, WhereTo, map);
 		this->pos = WhereTo;
 		this->status = MOVING;
-		this->movingPoints = this->movingPoints - getMoveMPS(WhereTo, map);
-
+		
 		map.changeUnitPos(this->pos, WhereTo);
 
 			valid = true;
@@ -630,17 +630,68 @@ bool Unit::move(Position WhereTo, Map map)
 
 }
 
+bool Unit::capture(Map map, Position pos)
+{
+	bool valid = false;
 
+	if (IsValidMove(map, pos) && map.captureAvailable(pos)) {
+		this->movingPoints -= getMoveMPS(this->pos, pos, map);
+		map.changeUnitPos(this->pos, pos);
+		this->pos = pos;
+		status = BLOCKED; //despues de capturar no me puedo seguir moviendo
+		valid = true;
+	}
 
+	return valid;
+}
 
-/////////////////////////FALTA////////////////////////////
+bool Unit::loadAPC(Map map, Position pos)
+{
+		bool valid = false;
+
+		if (this->type == FOOT && IsValidMove(map, pos)) {
+			movingPoints -= getMoveMPS(this->pos, pos, map);
+			map.changeUnitPos(this->pos, pos);
+			this->pos = pos;
+			status = MOVING;
+			valid = true;
+		}
+
+		return valid;
+}
+
 void Unit::ChangeUnitPosition(Position where)
-bool Unit::loadAPC()
-bool capture();
-bool unloadAPC();
-bool IsValidMove(); //VER mp!!! que devuelva los que necesita
-void Unit::getPossibleMoves(list<Position>& moves, Position tempPos, unsigned int mps, int currMPs);
-unsigned int Unit::getMoveMPS(Position origin, Position destination, Position temp, Map map);
+{
+	this->pos = where;
+}
+
+bool Unit::IsValidMove(Map map, Position WhereTO) //VER mp!!! que devuelva los que necesita
+{
+	list<Position> MovesPossible = getPossibleMoves(this->pos, map, this->movingPoints);
+	bool valid = false;
+
+	if (status == SELECTED)
+	{
+		for (list<Position>::iterator it = MovesPossible.begin(); it != MovesPossible.end(); it++)
+		{
+			if (it->row == WhereTO.row && it->column == WhereTO.column)
+				valid = true;
+		}
+	}
+
+	return valid;
+}
+/////////////////////////FALTA////////////////////////////
+
+
+
+list<Position> Unit::getPossibleMoves(Position tempPos, Map map, int currMPs) //incluye lugares doende se puede capturar a loadear a un apc
+{
+
+}
+
+
+unsigned int Unit::getMoveMPS(Position origin, Position destination, Map map);
 
 
 

@@ -36,10 +36,9 @@ public:
 	void heal();
 	bool move(Position WhereTo, Map map);
 	bool attack(Map map, Position whereTo, unsigned int dice);
-	bool capture();
-	bool loadAPC();
-	bool unloadAPC();
-
+	bool capture(Map map, Position pos);
+	bool loadAPC(Map map, Position pos);
+	
 	void ChangeUnitPosition(Position where);
 	static Unit* boughtUnit(units_d unitClass, Position position, teams_d color);
 
@@ -53,7 +52,7 @@ public:
 	void endTurn(); //reseteo variables necesarias
 	void resetMP();
 	
-	void getPossibleMoves(list<Position>& moves, Position start, Position curr, unsigned int mps);
+	list<Position> getPossibleMoves( Position tempPos, Map map, int currMPs);
 	list<Position> getPossibleAttacks(Map map);
 
 	bool isItAPC();

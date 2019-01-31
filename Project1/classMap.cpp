@@ -206,8 +206,7 @@ bool Map::posInMap(Position pos)
 
 bool Map::buyingAvailable(Position pos)
 {
-	if (board[pos.row][pos.column]->getBuilding()->getBuildingType() == FACTORY
-		&& (board[pos.row][pos.column]->getBuilding()->getBuildingTeam == team))
+	if (getBuildingPtr(pos)->getBuildingType() == FACTORY && (getBuildingPtr(pos)->getBuildingTeam == team))
 		return true;
 	else
 		return false;
@@ -240,7 +239,12 @@ bool Map::unloadAvailable(Position pos, Position WhereTo)
 	return false;
 }
 
-
+void Map::unloadAPC(Position pos, Position newPos)
+{
+	classAPC * apc = (classAPC *)getUnitPtr(pos);
+	if (apc->canUnload(newPos))
+		board[newPos.row][newPos.column]->setUnit(apc->unloadingUnitIfPossible(newPos));
+}
 
 bool Map::captureAvailable(Position pos)
 {
@@ -274,9 +278,166 @@ void Map::changeUnitPos(Position pos, Position newPos)
 	removeUnit(pos);
 }
 
-///////////////////////LO QUE FALTA//////////////////////////////////
 
+bool Map::moveUPavailable(Position pos)
+{
+	Position temp = pos;
+	temp.row++; //arriba
+	bool valid = false;
+	
+	if (posInMap(temp)) //si temp esta adentro del mapa 
+	{
+		if (!getFog(temp)) //no puede haber fog
+		{
+			if (IsUnitOnTop(pos)) //si tengo una unidad para mover
+			{
+				if (IsUnitOnTop(temp)) //si tengo una unidad a donde me quiero mover
+				{
+					if (getUnitType(pos) == FOOT) //si mi unidad es un foot
+					{
+						if (loadAvailable(temp)) //si la unidad que hay a donde me quiero mover es un APC mio 
+						{
+							valid = true; //si hay una unit solo me puedo mover si hay un APC MIO
+						}
+					}
+				}
+				if (IsBuildingOnTop(temp)) //si tengo una building
+				{
+					if (getUnitType(pos) == FOOT) //mi unidad es foot
+					{
+						if (captureAvailable(temp)) //si puedo capturar la ciudad 
+						{
+							valid = true; //me puedo mover
+						}
+					}
+				}
+				if (!IsUnitOnTop(temp) && !IsBuildingOnTop(temp)) // si no hay nada me puedo mover
+					valid = true;
+			}
+		}
+	}
+	return valid;
+}
 
+bool Map::moveDOWNavailable(Position pos)
+{
+	Position temp = pos;
+	temp.row--; //arriba
+	bool valid = false;
+
+	if (posInMap(temp)) //si temp esta adentro del mapa 
+	{
+		if (!getFog(temp)) //no puede haber fog
+		{
+			if (IsUnitOnTop(pos)) //si tengo una unidad para mover
+			{
+				if (IsUnitOnTop(temp)) //si tengo una unidad a donde me quiero mover
+				{
+					if (getUnitType(pos) == FOOT) //si mi unidad es un foot
+					{
+						if (loadAvailable(temp)) //si la unidad que hay a donde me quiero mover es un APC mio 
+						{
+							valid = true; //si hay una unit solo me puedo mover si hay un APC MIO
+						}
+					}
+				}
+				if (IsBuildingOnTop(temp)) //si tengo una building
+				{
+					if (getUnitType(pos) == FOOT) //mi unidad es foot
+					{
+						if (captureAvailable(temp)) //si puedo capturar la ciudad 
+						{
+							valid = true; //me puedo mover
+						}
+					}
+				}
+				if (!IsUnitOnTop(temp) && !IsBuildingOnTop(temp)) // si no hay nada me puedo mover
+					valid = true;
+			}
+		}
+	}
+	return valid;
+}
+
+bool Map::moveLEFTavailable(Position pos)
+{
+	Position temp = pos;
+	temp.column--; //arriba
+	bool valid = false;
+
+	if (posInMap(temp)) //si temp esta adentro del mapa 
+	{
+		if (!getFog(temp)) //no puede haber fog
+		{
+			if (IsUnitOnTop(pos)) //si tengo una unidad para mover
+			{
+				if (IsUnitOnTop(temp)) //si tengo una unidad a donde me quiero mover
+				{
+					if (getUnitType(pos) == FOOT) //si mi unidad es un foot
+					{
+						if (loadAvailable(temp)) //si la unidad que hay a donde me quiero mover es un APC mio 
+						{
+							valid = true; //si hay una unit solo me puedo mover si hay un APC MIO
+						}
+					}
+				}
+				if (IsBuildingOnTop(temp)) //si tengo una building
+				{
+					if (getUnitType(pos) == FOOT) //mi unidad es foot
+					{
+						if (captureAvailable(temp)) //si puedo capturar la ciudad 
+						{
+							valid = true; //me puedo mover
+						}
+					}
+				}
+				if (!IsUnitOnTop(temp) && !IsBuildingOnTop(temp)) // si no hay nada me puedo mover
+					valid = true;
+			}
+		}
+	}
+	return valid;
+}
+bool Map::moveRIGHTavailable(Position pos)
+{
+	Position temp = pos;
+	temp.column++; //arriba
+	bool valid = false;
+
+	if (posInMap(temp)) //si pos está adentro del mapa 
+	{
+
+		if (!getFog(temp)) //no puede haber fog
+		{
+			if (IsUnitOnTop(pos)) //si tengo una unidad para mover
+			{
+				if (IsUnitOnTop(temp)) //si tengo una unidad a donde me quiero mover
+				{
+					if (getUnitType(pos) == FOOT) //si mi unidad es un foot
+					{
+						if (loadAvailable(temp)) //si la unidad que hay a donde me quiero mover es un APC mio 
+						{
+							valid = true; //si hay una unit solo me puedo mover si hay un APC MIO
+						}
+					}
+				}
+				if (IsBuildingOnTop(temp)) //si tengo una building
+				{
+					if (getUnitType(pos) == FOOT) //mi unidad es foot
+					{
+						if (captureAvailable(temp)) //si puedo capturar la ciudad 
+						{
+							valid = true; //me puedo mover
+						}
+					}
+				}
+				if (!IsUnitOnTop(temp) && !IsBuildingOnTop(temp)) // si no hay nada me puedo mover
+					valid = true;
+			}
+		}
+	}
+	return valid;
+}
 
 options_s Map::getOptions(Position pos)
 {
@@ -285,64 +446,42 @@ options_s Map::getOptions(Position pos)
 	tmp.attackLeftAvailable = false;
 	tmp.attackRightAvailable = false;
 	tmp.attackUpAvailable = false;
-	tmp.buyAvailable = false;
-	tmp.moveDownAvailable = false;
-	tmp.moveLeftAvailable = false;
-	tmp.moveRightAvailable = false;
-	tmp.moveUpAvailable = false;
-	tmp.passAvailable = true;
-	tmp.captureAvailable = false;
-	tmp.canLoad = false;
+	tmp.buyAvailable = buyingAvailable(pos); //chequea si es factory del mismo equipo del mapa
+	tmp.moveDownAvailable = moveDOWNavailable(pos);
+	tmp.moveLeftAvailable = moveLEFTavailable(pos);
+	tmp.moveRightAvailable = moveRIGHTavailable(pos);
+	tmp.moveUpAvailable = moveUPavailable(pos);
+	tmp.passAvailable = true; //???
+	tmp.captureAvailable = captureAvailable(pos); //si hay building y no hay otra unit
+	tmp.canLoad = loadAvailable(pos); // si es APC y puede cargar
 	tmp.canUnload = false;
 
 	Position temp = pos;
 
-	temp.row++;
+	if (IsUnitOnTop(pos))
+	{
+		temp.row++; //arriba
+		tmp.attackUpAvailable = getUnit(pos).IsValidAttack(*this, temp);
+		tmp.canUnload = unloadAvailable(pos, temp);
 
-	if (IsUnitOnTop(temp) && getUnitTeam(temp) != team)
-	{
-			tmp.attackUpAvailable = true;
+		temp.row -= 2;//abajo
+		tmp.attackDownAvailable = getUnit(pos).IsValidAttack(*this, temp);
+		if (tmp.canUnload == false)
+			tmp.canUnload = unloadAvailable(pos, temp);
+
+		temp.row = pos.row;
+		temp.column++; //derecha
+		tmp.attackRightAvailable = getUnit(pos).IsValidAttack(*this, temp);
+		if (tmp.canUnload == false)
+			tmp.canUnload = unloadAvailable(pos, temp);
+
+		temp.column -= 2; //izquierda
+		tmp.attackLeftAvailable = getUnit(pos).IsValidAttack(*this, temp);
+		if (tmp.canUnload == false)
+			tmp.canUnload = unloadAvailable(pos, temp);
+
 	}
-	else 
-	{
-		tmp.moveUpAvailable = true;
-	}
-		if (isThereAnEnemyThere(x, y + 1, getEnemyTeam())) {
-			tmp.attackDownAvailable = true;
-			tmp.moveDownAvailable = false;
-		}
-		else {
-			tmp.attackDownAvailable = false;
-			tmp.moveDownAvailable = true;
-		}
-		if (isThereAnEnemyThere(x - 1, y, getEnemyTeam())) {
-			tmp.attackLeftAvailable = true;
-			tmp.moveLeftAvailable = false;
-		}
-		else {
-			tmp.attackLeftAvailable = false;
-			tmp.moveLeftAvailable = true;
-		}
-		if (isThereAnEnemyThere(x + 1, y, getEnemyTeam())) {
-			tmp.attackRightAvailable = true;
-			tmp.moveRightAvailable = false;
-		}
-		else {
-			tmp.attackRightAvailable = false;
-			tmp.moveRightAvailable = true;
-		}
-	}
-	else if (isThereAFriendBuildingThere(x, y)) {
-		tmp.buyAvailable = true;
-	}
-	return tmp;
 }
 
 
-}
-
-
-
-
-//movesAvailable
 

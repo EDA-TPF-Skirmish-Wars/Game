@@ -67,15 +67,20 @@ public:
 	//funciones para completar options_s
 	bool buyingAvailable(Position pos);
 	bool captureAvailable(Position pos);
-	//movesAvailable
 	bool loadAvailable(Position pos);
-	bool Map::unloadAvailable(Position pos, Position WhereTo);
+	bool unloadAvailable(Position pos, Position WhereTo);
+	bool moveUPavailable(Position pos);
+	bool moveDOWNavailable(Position pos);
+	bool moveLEFTavailable(Position pos);
+	bool moveRIGHTavailable(Position pos);
+
 
 	void removeUnit(Position pos);
 	void changeUnitPos(Position pos, Position newPos);
-	void clearFog(Position pos);// saca la fog de la tile de arriba abajo derecha e izquierda de la posición que le mando
+	void clearFog(Position pos); // saca la fog de la tile de arriba abajo derecha e izquierda de la posición que le mando
 	void selectTile(Position pos);
 	void unselectTile(Position pos);
+	void unloadAPC(Position pos, Position newPos);
 
 	bool posInMap(Position pos);
 
@@ -88,4 +93,3 @@ private:
 	teams_d team;
 	teams_d enemyTeam;
 };
-

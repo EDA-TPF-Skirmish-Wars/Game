@@ -14,7 +14,7 @@ public:
 
 	bool loadUnitIfPossible(Unit unitToLoad, teams_d colorToLoad); //ver cuando se puede 
 
-	bool unloadingUnitIfPossible(Position pos); 
+	Unit * unloadingUnitIfPossible(Position pos); 
 
 	void healLoadedUnits();
 	void ChangeUnitsPosition();

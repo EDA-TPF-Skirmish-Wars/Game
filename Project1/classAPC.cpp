@@ -50,23 +50,20 @@ bool classAPC::loadUnitIfPossible(Unit unitToLoad, teams_d colorToLoad)
 		return false;
 }
 
-bool classAPC::unloadingUnitIfPossible(Position pos)
+Unit * classAPC::unloadingUnitIfPossible(Position pos)
 {
+	Unit *  unitUnloaded = nullptr;
 	if (!UnitsLoaded.empty())
 	{
 		if ((abs(pos.row - this->pos.row) + abs(pos.column - this->pos.column)) == 1) //se descarga solo a lugaes que esten a 1 de distancia
 		{
-			Unit * unitUnloaded = UnitsLoaded.back();
+			unitUnloaded = UnitsLoaded.back();
 			unitUnloaded->ChangeUnitPosition(pos);
 			UnitsLoaded.pop_back();
 			NUnitsInside--;
-			return true;
 		}
-		else
-			return false;
 	}
-	else
-		return false;
+	return unitUnloaded;
 }
 
 void classAPC::healLoadedUnits()
